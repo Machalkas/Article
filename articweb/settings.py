@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8fow@+(^ov!ga^uqf5cng((idm(5+6bnt+n&tli%1j#r8ull@n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -72,6 +72,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'articweb.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
