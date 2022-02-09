@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
 urlpatterns=[
-path('get/', views.ArticleViewSet.as_view())
+path('list/', views.ArticlesViewSet.as_view()),
+path('get/<str:id>', views.ArticleViewSet.as_view())
+
 ]
