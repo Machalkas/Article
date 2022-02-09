@@ -30,6 +30,7 @@ class ArticleView(APIView):
                 return Response(status=403)
         serializer=ArticleSerializer(article, many=False)
         return Response(serializer.data)
+
     def put(self, request, id):#обновление статьи
         try:
             article=Article.objects.get(pk=id)
@@ -43,6 +44,24 @@ class ArticleView(APIView):
             return Response(serializer.data,status=200)
         return Response(serializer.errors,status=400)
 
+    def delete(self, request, id):#удаление статьи
+        try:
+            article=Article.objects.get(pk=id)
+        except:
+            return Response(data={"error":"article %s not found"%id}, status=404)
+        if not request.user.is_authenticated or request.user!=article.autor:
+            return Response(status=403)
+        article.delete()
+        return Response(status=200)
 
 
-    
+class CreateArticleView(APIView):
+    def post(self, request):#создание статьи
+        if not request.user.is_authenticated or request.user.sub==False:
+            return Response(status=403)
+        serializer=EditArticleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(autor=request.user)
+            return Response(serializer.data,status=200)
+        return Response(serializer.errors,status=400)
+
