@@ -22,3 +22,8 @@ class ArticleSerializer(serializers.ModelSerializer):
     
     def autorName(self, obj):
         return obj.autor.first_name+" "+obj.autor.last_name
+
+class EditArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Article
+        fields=["title","text"]
