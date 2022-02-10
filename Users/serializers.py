@@ -9,14 +9,14 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     class Meta:
         model=User
-        fields=['pk','email','password','sub','autor']
+        fields=['pk','email','password','first_name','last_name','sub','autor']
         
     def validate(self, data):
         password_validation.validate_password(password=data["password"], user=User)
         return data
 
     def create(self, data):
-        user=User.objects.create(email=data['email'], password=make_password(data["password"]))
+        user=User.objects.create(email=data['email'], password=make_password(data["password"]), first_name=data.get('first_name',''), last_name=data.get('last_name',''))
         return user
 
 class UserPermissionSerializer(serializers.ModelSerializer):
