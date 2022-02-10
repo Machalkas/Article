@@ -1,12 +1,9 @@
 from importlib.resources import Resource
 from re import sub
-# from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from .serializers import ArticlesSerializer, ArticleSerializer, EditArticleSerializer
 from .models import Article
-from Articles import serializers
 
 class ArticlesView(APIView):
     def get(self, request):#список статей
@@ -61,7 +58,10 @@ class CreateArticleView(APIView):
             return Response(status=403)
         serializer=EditArticleSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(autor=request.user)
+            try:
+                serializer.save(autor=request.user)
+            except:
+                return Response(data={"error":"You already have article with the same title"}, status=400)
             return Response(serializer.data,status=200)
         return Response(serializer.errors,status=400)
 
