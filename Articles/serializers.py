@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Article
 
-class ArticlesSerializer(serializers.ModelSerializer):
+class ListArticlesSerializer(serializers.ModelSerializer):
     autor_name=serializers.SerializerMethodField(method_name="autorName")
     short_text=serializers.SerializerMethodField(method_name="textCutter")
     class Meta:

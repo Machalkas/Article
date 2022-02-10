@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from .models import User
 
@@ -10,3 +12,23 @@ class UserRegisterView(APIView):
             serializer.save()
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
+
+class UserView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        try:
+            user=User.objects.get(pk=id)
+        except:
+            return Response(data={"detail":"Пользватель %s не найден"%id}, status=404)
+        serializer=UserSerializer(user)
+        return Response(serializer.data)
+
+class SelfView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer=UserSerializer(request.user)
+        return Response(serializer.data)
