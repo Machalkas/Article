@@ -16,7 +16,6 @@ class UserRegisterView(APIView):
 class UserView(APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
-
     def get(self, request, id):
         try:
             user=User.objects.get(pk=id)
@@ -39,10 +38,17 @@ class UserPermissionView(APIView):
             return Response(serializer.data,status=200)
         return Response(serializer.errors,status=400)
 
+class ListUsersView(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUser]
+    def get(self, request):
+        user=User.objects.all()
+        serializer=UserSerializer(user, many=True)
+        return Response(serializer.data)
+
 class SelfView(APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         serializer=UserSerializer(request.user)
         return Response(serializer.data)
