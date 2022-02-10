@@ -33,7 +33,7 @@ class ArticleView(APIView):
             article=Article.objects.get(pk=id)
         except:
             return Response(data={"error":"article %s not found"%id}, status=404)
-        if not request.user.is_authenticated or request.user!=article.autor:
+        if not request.user.is_authenticated or request.user!=article.autor or request.user.autor==False:
             return Response(status=403)
         serializer=EditArticleSerializer(article,data=request.data)
         if serializer.is_valid():
@@ -46,7 +46,7 @@ class ArticleView(APIView):
             article=Article.objects.get(pk=id)
         except:
             return Response(data={"error":"article %s not found"%id}, status=404)
-        if not request.user.is_authenticated or request.user!=article.autor:
+        if not request.user.is_authenticated or request.user!=article.autor or request.user.autor==False:
             return Response(status=403)
         article.delete()
         return Response(status=200)
@@ -54,7 +54,7 @@ class ArticleView(APIView):
 
 class CreateArticleView(APIView):
     def post(self, request):#создание статьи
-        if not request.user.is_authenticated or request.user.sub==False:
+        if not request.user.is_authenticated or request.user.autor==False:
             return Response(status=403)
         serializer=EditArticleSerializer(data=request.data)
         if serializer.is_valid():
