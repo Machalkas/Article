@@ -1,5 +1,3 @@
-from dataclasses import fields
-from traceback import print_tb
 from rest_framework import serializers
 from .models import Article
 
